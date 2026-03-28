@@ -1,0 +1,37 @@
+<div>
+  <style>
+    .box {
+      border-width: 1px;
+      border-color: var(--pico-primary-border);
+      border-style: dashed;
+      min-height: 50vh;
+      padding: 1vw;
+      font-family: fira, monospace;
+    }
+
+  </style>
+
+  <div id="demo" class="box">
+    > Elahna (specifically lib/elahna_web/controllers/file_content_controller.ex) is serving priv/static/index.html
+    <p></p>
+    > The button you clicked was enhanced with HTMX tags. A GET request was
+    sent to the back-end (endpoint /xml/demo)
+    <p></p>
+    > Function ElahnaWeb.FileContentController.demo inside
+    lib/elahna_web/controllers/file_content_controller.ex was called
+    <p></p>
+    > It loaded priv/content/xml/demo.xml (just an HTML snippet, kinda
+    like a component?) and sent it as a response to the client
+    <p></p>
+    > HTMX swapped the div on the front page with the response.
+    <p></p>
+
+    <div class="form-section">
+      <form hx-post="/api/countletters" hx-target="#demo">
+      <input
+        type="text"
+        name="string"
+        placeholder="Enter something (% is not allowed)">
+      <button type="submit">Let's try POST request 📨</button></form></div>
+
+  </div></div>
