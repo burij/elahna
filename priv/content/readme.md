@@ -66,9 +66,6 @@ Elahna comes with several built-in endpoints:
 | Method | Path Pattern         | Description                                      |
 |--------|---------------------|--------------------------------------------------|
 | GET    | `/`                 | Serves index.html                                |
-| GET    | `/demo`             | Serves the demo XML chunk                        |
-| GET    | `/xml/demo`         | Same as /demo                                    |
-| GET    | `/readme`           | Renders the project README as HTML               |
 | GET    | `/md/<name>`        | Renders `<name>.md` as HTML                      |
 | GET    | `/xml/<name>`       | Serves `<name>.xml`                              |
 | POST   | `/api/countletters` | Returns a template with the count of letters     |

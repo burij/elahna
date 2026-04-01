@@ -1,18 +1,21 @@
 <div>
   <div id="demo">
     > You entered $USERINPUT in the form. Your input was processed as a string.
-    Function ElahnaWeb.FileContentController.countletters calculated that $USERINPUT has $VALUE letters.
+    Function ElahnaWeb.FileContentController.countletters calculated that
+    $USERINPUT has $VALUE letters.
     <p></p>
     > Building APIs, template systems, and design components with Elahna is very
     easy and a lot of fun. For most use cases, you probably only need to modify
     lib/elahna_web/controllers/file_content_controller.ex
     <p></p>
-    > Define endpoints in the router (lib/elahna_web/router.ex), then write custom controller
-    actions to define the response for that request. That's it.
+    > Define endpoints in the router (lib/elahna_web/router.ex), then write
+    custom controller actions to define the response for that request.
+    That's it.
     <p></p>
-    > lib/elahna_web/controllers/file_content_controller.ex contains helpful functions for
-    processing Markdown to HTML (using Earmark). You can see it in action by
-    <a href="#" hx-get="/readme" hx-target="#content">rendering README.md</a>
+    > lib/elahna_web/controllers/file_content_controller.ex contains helpful
+    functions for processing Markdown to HTML (using Earmark). You can see it in
+    action by
+    <a href="#" hx-get="/md/readme" hx-target="#content">rendering README.md</a>
     of this project directly to the frontend. It contains more in-depth
     documentation.
   </div>

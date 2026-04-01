@@ -27,7 +27,7 @@ let
   shell = pkgs.mkShell {
     buildInputs = elixirEnv ++ dependencies;
     shellHook = ''
-      cp ./README.md ./priv/content/md/readme.md
+      cp ./README.md ./priv/content/readme.md
       alias run='mix phx.server'
       alias form='nixpkgs-fmt lib.nix; mix format'
       alias test='PHX_SERVER=true SECRET_KEY_BASE=$(mix phx.gen.secret) \

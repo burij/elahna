@@ -8,27 +8,29 @@ defmodule ElahnaWeb.Endpoint do
     same_site: "Lax"
   ]
 
-  plug Plug.Static,
+  plug(Plug.Static,
     at: "/",
     from: :elahna,
     gzip: not code_reloading?,
     only: ElahnaWeb.static_paths(),
     raise_on_missing_only: code_reloading?
+  )
 
   if code_reloading? do
-    plug Phoenix.CodeReloader
+    plug(Phoenix.CodeReloader)
   end
 
-  plug Plug.RequestId
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+  plug(Plug.RequestId)
+  plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
 
-  plug Plug.Parsers,
+  plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
+  )
 
-  plug Plug.MethodOverride
-  plug Plug.Head
-  plug Plug.Session, @session_options
-  plug ElahnaWeb.Router
+  plug(Plug.MethodOverride)
+  plug(Plug.Head)
+  plug(Plug.Session, @session_options)
+  plug(ElahnaWeb.Router)
 end

@@ -8,7 +8,7 @@ defmodule ElahnaWeb.FileContentController do
   end
 
   def index(conn, _params) do
-    html_path = Application.app_dir(:elahna, "priv/static/index.html")
+    html_path = Path.join(storage_path(), "index.html")
     version = Application.spec(:elahna, :vsn) |> List.to_string()
 
     if File.exists?(html_path) do
@@ -25,10 +25,24 @@ defmodule ElahnaWeb.FileContentController do
     end
   end
 
-  def show_xml(conn, %{"filename" => filename}) do
-    base_dir = Path.join(storage_path(), "xml")
+  def favicon(conn, _params) do
+    favicon_path = Path.join(storage_path(), "favicon.ico")
 
-    case FileGuard.safe_path(base_dir, filename, "xml") do
+    if File.exists?(favicon_path) do
+      content = File.read!(favicon_path)
+
+      conn
+      |> put_resp_content_type("image/x-icon")
+      |> send_resp(200, content)
+    else
+      send_resp(conn, 404, "Not found")
+    end
+  end
+
+  def show_xml(conn, %{"filename" => filename}) do
+    base_dir = storage_path()
+
+    case FileGuard.safe_path(base_dir, filename <> ".xml") do
       {:ok, path} ->
         content = File.read!(path)
 
@@ -42,9 +56,9 @@ defmodule ElahnaWeb.FileContentController do
   end
 
   def show_md(conn, %{"filename" => filename}) do
-    base_dir = Path.join(storage_path(), "md")
+    base_dir = storage_path()
 
-    case FileGuard.safe_path(base_dir, filename, "md") do
+    case FileGuard.safe_path(base_dir, filename <> ".md") do
       {:ok, path} ->
         content = File.read!(path)
         html = Earmark.as_html!(content)
@@ -55,24 +69,6 @@ defmodule ElahnaWeb.FileContentController do
 
       {:error, :not_found} ->
         send_resp(conn, 404, "Markdown file not found")
-    end
-  end
-
-  def index_files(conn, %{"type" => type}) do
-    folder = Path.join(storage_path(), type)
-
-    case File.ls(folder) do
-      {:ok, files} ->
-        slugs =
-          files
-          |> Enum.filter(&String.ends_with?(&1, ".#{type}"))
-          |> Enum.map(&String.replace(&1, ".#{type}", ""))
-          |> Enum.sort()
-
-        json(conn, %{slugs: slugs, type: type})
-
-      {:error, _} ->
-        json(conn, %{error: "Folder not found"})
     end
   end
 
@@ -98,34 +94,5 @@ defmodule ElahnaWeb.FileContentController do
     conn
     |> put_resp_content_type("text/html")
     |> send_resp(200, result)
-  end
-
-  def demo(conn, _params) do
-    xml_path = Path.join([storage_path(), "xml", "demo.xml"])
-
-    if File.exists?(xml_path) do
-      content = File.read!(xml_path)
-
-      conn
-      |> put_resp_content_type("text/html")
-      |> send_resp(200, content)
-    else
-      send_resp(conn, 404, "Demo file not found")
-    end
-  end
-
-  def readme(conn, _params) do
-    md_path = Path.join([storage_path(), "md", "readme.md"])
-
-    if File.exists?(md_path) do
-      content = File.read!(md_path)
-      html = Earmark.as_html!(content)
-
-      conn
-      |> put_resp_content_type("text/html")
-      |> send_resp(200, html)
-    else
-      send_resp(conn, 404, "README file not found")
-    end
   end
 end
