@@ -5,19 +5,20 @@ defmodule ElahnaWeb.Router do
     plug(:accepts, ["json", "html"])
   end
 
-  scope "/", ElahnaWeb do
-    pipe_through(:api)
-
-    get("/", FileContentController, :index)
-    get("/xml/:filename", FileContentController, :show_xml)
-    get("/md/:filename", FileContentController, :show_md)
-  end
-
   scope "/api", ElahnaWeb do
     pipe_through(:api)
 
-    get("/xml/:filename", FileContentController, :show_xml)
-    get("/md/:filename", FileContentController, :show_md)
-    post("/countletters", FileContentController, :countletters)
+    get("/xml/:filename", ContentController, :show_xml)
+    get("/md/:filename", ContentController, :show_md)
+    post("/countletters", ApiController, :countletters)
+  end
+
+  scope "/", ElahnaWeb do
+    pipe_through(:api)
+
+    get("/", HtmlController, :index)
+    get("/xml/:filename", ContentController, :show_xml)
+    get("/md/:filename", ContentController, :show_md)
+    get("/*path", FileController, :file)
   end
 end

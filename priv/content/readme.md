@@ -48,34 +48,35 @@ lib/
     ├── router.ex            # Routes definition
     ├── file_guard.ex        # Security module
     └── controllers/
-        └── file_content_controller.ex  # Controller logic
+        ├── html_controller.ex      # index.html
+        ├── content_controller.ex   # MD and XML files
+        ├── file_controller.ex      # CSS, JS, images
+        └── api_controller.ex       # Custom API extension point
 
 priv/
-├── static/
-│   └── index.html           # Main HTML page
 └── content/
-    ├── xml/                 # XML snippets for htmx
-    ├── md/                  # Markdown files
-    └── count.xml            # Response template
+    ├── index.html           # Main HTML page
+    ├── *.md                 # Markdown files
+    ├── *.xml                # XML snippets for htmx
+    └── assets/              # CSS, JS, images
 ```
 
 # Endpoints
 
 Elahna comes with several built-in endpoints:
 
-| Method | Path Pattern         | Description                                      |
-|--------|---------------------|--------------------------------------------------|
-| GET    | `/`                 | Serves index.html                                |
-| GET    | `/md/<name>`        | Renders `<name>.md` as HTML                      |
-| GET    | `/xml/<name>`       | Serves `<name>.xml`                              |
-| POST   | `/api/countletters` | Returns a template with the count of letters     |
+- `GET /` - Serves index.html
+- `GET /md/<name>` - Renders `<name>.md` as HTML
+- `GET /xml/<name>` - Serves `<name>.xml`
+- `GET /*path` - Serves assets (CSS, JS, images)
+- `POST /api/countletters` - Returns a template with the count of letters
 
 # Customization
 
-1. **Static Content:** Edit `priv/static/index.html`
+1. **Static Content:** Edit `priv/content/index.html`
 2. **Dynamic Content:** Add XML or MD files to `priv/content/`
 3. **Routes:** Modify `lib/elahna_web/router.ex`
-4. **Controller Logic:** Edit `lib/elahna_web/controllers/file_content_controller.ex`
+4. **Custom API Endpoints:** Add to `lib/elahna_web/controllers/api_controller.ex`
 
 # Philosophy
 

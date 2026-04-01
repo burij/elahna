@@ -43,6 +43,11 @@ defmodule ElahnaWeb do
 
       import Plug.Conn
 
+      defp storage_path do
+        Application.get_env(:elahna, :content_storage) ||
+          Application.app_dir(:elahna, "priv/content")
+      end
+
       unquote(verified_routes())
     end
   end

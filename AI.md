@@ -4,9 +4,13 @@ This is a web application written using the Phoenix web framework.
 
 - This is a **Phoenix HTMX app** (not LiveView) - uses controller-based routing with HTMX for interactivity
 - The original/legacy project is in the `./lahna` directory
-- Content is served from `priv/static/` (HTML) and `priv/content/` (XML, MD files)
-- Routes are defined in `lib/elahna_web/router.ex` with controllers in `lib/elahna_web/controllers/`
-- Uses `Earmark` for markdown rendering
+- Content is served from `priv/content/` (HTML, XML, MD files, and assets)
+- Routes are defined in `lib/elahna_web/router.ex` with controllers in `lib/elahna_web/controllers/`:
+  - `HtmlController` - serves index.html
+  - `ContentController` - serves MD and XML files
+  - `FileController` - serves assets (CSS, JS, images)
+  - `ApiController` - user extension point for custom API endpoints
+- Uses `MDEx` for markdown rendering
 
 ## Running the app
 
