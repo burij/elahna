@@ -15,7 +15,7 @@
     > lib/elahna_web/controllers/file_content_controller.ex contains helpful
     functions for processing Markdown to HTML (using Earmark). You can see it in
     action by
-    <a href="#" hx-get="/md/readme" hx-target="#content">rendering README.md</a>
+    <a href="#" hx-get="/readme" hx-target="#content">rendering README.md</a>
     of this project directly to the frontend. It contains more in-depth
     documentation.
   </div>

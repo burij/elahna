@@ -1,37 +1,63 @@
 defmodule ElahnaWeb.FileController do
   use ElahnaWeb, :controller
+  alias ElahnaWeb.FileGuard
 
   def file(conn, %{"path" => path_list}) do
     filename = Path.join(path_list)
-    base_path = Path.expand(storage_path())
-    full_path = Path.expand(Path.join(storage_path(), filename))
+    ext = Path.extname(filename)
 
-    if String.starts_with?(full_path, base_path) and File.exists?(full_path) do
-      content = File.read!(full_path)
-      content_type = content_type_for(filename)
+    cond do
+      ext == ".md" -> render_md(conn, filename)
+      ext == "" && md_exists?(filename) -> render_md(conn, filename <> ".md")
+      true -> serve_static(conn, filename)
+    end
+  end
 
+  defp render_md(conn, filename) do
+    case FileGuard.safe_path(storage_path(), filename) do
+      {:ok, path} ->
+        content = File.read!(path)
+        html = MDEx.to_html!(content, render: [unsafe: true], sanitize: nil)
+
+        conn
+        |> put_resp_content_type("text/html")
+        |> send_resp(200, html)
+
+      {:error, :not_found} ->
+        send_resp(conn, 404, "Not found")
+    end
+  end
+
+  defp md_exists?(filename) do
+    File.exists?(Path.join(storage_path(), filename <> ".md"))
+  end
+
+  defp serve_static(conn, filename) do
+    base = Path.expand(storage_path())
+    full = Path.expand(Path.join(storage_path(), filename))
+
+    if String.starts_with?(full, base) and File.exists?(full) do
       conn
-      |> put_resp_content_type(content_type)
-      |> send_resp(200, content)
+      |> put_resp_content_type(content_type(filename))
+      |> send_resp(200, File.read!(full))
     else
       send_resp(conn, 404, "Not found")
     end
   end
 
-  defp content_type_for(filename) do
-    case Path.extname(filename) do
-      ".css" -> "text/css"
-      ".js" -> "application/javascript"
-      ".html" -> "text/html"
-      ".ico" -> "image/x-icon"
-      ".svg" -> "image/svg+xml"
-      ".jpg" -> "image/jpeg"
-      ".gif" -> "image/gif"
-      ".png" -> "image/png"
-      ".ttf" -> "font/ttf"
-      ".woff" -> "font/woff"
-      ".woff2" -> "font/woff2"
-      _ -> "application/octet-stream"
-    end
+  defp content_type(filename) do
+    %{
+      ".css" => "text/css",
+      ".js" => "application/javascript",
+      ".html" => "text/html",
+      ".ico" => "image/x-icon",
+      ".svg" => "image/svg+xml",
+      ".jpg" => "image/jpeg",
+      ".png" => "image/png",
+      ".gif" => "image/gif",
+      ".ttf" => "font/ttf",
+      ".woff" => "font/woff",
+      ".woff2" => "font/woff2"
+    }[Path.extname(filename)] || "application/octet-stream"
   end
 end
