@@ -1,6 +1,5 @@
 defmodule ElahnaWeb.FileController do
   use ElahnaWeb, :controller
-  alias ElahnaWeb.FileGuard
 
   def file(conn, %{"path" => path_list}) do
     filename = Path.join(path_list)
@@ -14,18 +13,12 @@ defmodule ElahnaWeb.FileController do
   end
 
   defp render_md(conn, filename) do
-    case FileGuard.safe_path(storage_path(), filename) do
-      {:ok, path} ->
-        content = File.read!(path)
-        html = MDEx.to_html!(content, render: [unsafe: true], sanitize: nil)
+    path = Path.join(storage_path(), filename)
+    html = MDEx.to_html!(File.read!(path), render: [unsafe: true], sanitize: nil)
 
-        conn
-        |> put_resp_content_type("text/html")
-        |> send_resp(200, html)
-
-      {:error, :not_found} ->
-        send_resp(conn, 404, "Not found")
-    end
+    conn
+    |> put_resp_content_type("text/html")
+    |> send_resp(200, html)
   end
 
   defp md_exists?(filename) do
