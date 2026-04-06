@@ -1,5 +1,7 @@
 defmodule Elahna.Markdown do
-  @block_tags ~r/<(div|p|ul|ol|li|table|blockquote|pre|h[1-6]|section|article|main|header|footer|nav|aside|form)\b[^>]*>/i
+  @block_tag_names ~w[div p ul ol li table blockquote pre h1 h2 h3 h4 h5 h6
+                      section article main header footer nav aside form]
+  @block_tags ~r/<(#{Enum.join(@block_tag_names, "|")})\b[^>]*>/i
 
   def to_html(content) do
     content
