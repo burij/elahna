@@ -1,0 +1,123 @@
+@font-face {
+      font-family: 'Logo';
+      font-style: normal;
+      font-display: swap;
+      src: url('./fonts/Courgette-Regular.ttf')
+      format('truetype');
+      font-weight: 400;
+  }
+
+@font-face {
+    font-family: 'Code';
+    font-display: swap;
+    src: url('./fonts/GoogleSansCode-VariableFont_wght.ttf')
+    format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-display: swap;
+    src: url('./fonts/Inter-VariableFont_opsz,wght.ttf')
+    format('truetype');
+    font-weight: 400 900;
+}
+
+@font-face {
+    font-family: 'Domine';
+    font-display: swap;
+    src: url('./fonts/Domine-VariableFont_wght.ttf')
+    format('truetype');
+    font-weight: 200;
+}
+
+
+:root, :host {
+  --pico-font-size: 100%;
+  --pico-font-family: 'Inter', sans-serif;
+  --pico-font-family-monospace: 'Code', monospace;
+}
+
+
+body {
+  background-color: var(--pico-background-color);
+  opacity: 0.8;
+  background-image:
+    linear-gradient(var(--pico-muted-border-color)
+      1.5px, transparent 1.5px),
+    linear-gradient(to right, var(--pico-muted-border-color)
+      1.5px, var(--pico-background-color) 1.5px);
+  background-size: 5vw 5vw;
+  background-repeat: repeat;
+  min-height: 100vh;
+}
+
+.air {padding-top: 12vh;}
+.logo {
+  font-family: 'Logo';
+  font-size: 180%;
+  text-decoration: none;
+  color: #fff;
+  text-shadow:
+    0 0 5px var(--pico-color),
+    0 0 10px var(--pico-color),
+    0 0 20px var(--pico-color),
+    0 0 40px var(--pico-color),
+    0 0 80px var(--pico-color);
+  animation: flicker 3s infinite alternate;}
+  @keyframes flicker {0%, 18%, 22%, 25%, 53%, 57%, 100%
+    {text-shadow:
+      0 0 5px var(--pico-color),
+      0 0 10px var(--pico-color),
+      0 0 20px var(--pico-color),
+      0 0 40px var(--pico-color),
+      0 0 80px var(--pico-color);}
+    20%, 24%, 55% {text-shadow: none;}}
+
+.terminal {
+  font-family: var(--pico-font-family-monospace);
+  font-size: 90%;
+  display: inline-block;
+  overflow: hidden;
+  border-right: 3px solid var(--pico-color);
+  white-space: nowrap;
+  animation: typing 1s steps(40, end), blink_border 1s infinite;}
+  @keyframes typing { from { width: 0; } to { width: 25%; } }
+  @keyframes blink_border
+    { 0%, 50%
+      { border-color: var(--pico-color);}
+      51%, 100% {
+      border-color: transparent;} }
+
+.phonenumber{
+  font-family: var(--pico-font-family-monospace);
+  font-size: 90%;
+  opacity: 0;
+  animation: fadeIn 0.0s ease-in-out 1.2s forwards;}
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.copyicon{
+  text-align: right;
+  opacity: 0;
+  cursor: pointer;
+  animation: fadeIn 0.5s ease-in-out 1.5s forwards;}
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.checkicon{
+  text-align: right;
+  opacity: 0;
+  animation: fadeIn 0.1s ease-in-out 0.2s forwards;}
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.menu{
+  text-decoration: none;
+  color: var(--pico-primary-focus);
+  font-size: 230%;
+  font-family: var(--pico-font-family);
+}
+
+.blog{
+  font-family: 'Domine';
+  font-size: 120%;
+  max-width: 66ch;
+}

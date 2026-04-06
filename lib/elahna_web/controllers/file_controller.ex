@@ -14,7 +14,7 @@ defmodule ElahnaWeb.FileController do
 
   defp render_md(conn, filename) do
     path = Path.join(storage_path(), filename)
-    html = MDEx.to_html!(File.read!(path), render: [unsafe: true], sanitize: nil)
+    {:ok, html, _} = Earmark.as_html(File.read!(path))
 
     conn
     |> put_resp_content_type("text/html")

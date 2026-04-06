@@ -46,7 +46,7 @@ defmodule Elahna.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:bandit, "~> 1.5"},
-      {:mdex, "~> 0.12"}
+      {:earmark, "~> 1.4"}
     ]
   end
 

@@ -1,0 +1,27 @@
+<div>
+<h1>Desknote</h1>
+
+<hr>
+
+<style>
+  .box {
+    padding: 1vw;
+  }
+
+</style>
+
+<div id="desknote">
+<p>Add an anonymus message directly to my main note app. Be aware, that no meta information exept timestamp will be transfered: I have no way to know, who who is the author, unless it's in the message. </p>
+
+  <div class="form-section">
+    <form hx-post="/api/desknote" hx-target="#desknote">
+    <textarea
+      type="text"
+      name="string"
+      style="min-height: 20vh;">Message
+      </textarea>
+    <button class="primary" type="submit">Send 📨</button></form></div>
+
+</div></div>
+
+
