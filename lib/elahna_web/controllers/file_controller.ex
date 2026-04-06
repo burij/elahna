@@ -14,7 +14,7 @@ defmodule ElahnaWeb.FileController do
 
   defp render_md(conn, filename) do
     path = Path.join(storage_path(), filename)
-    {:ok, html, _} = Earmark.as_html(File.read!(path))
+    html = Elahna.Markdown.to_html!(File.read!(path))
 
     conn
     |> put_resp_content_type("text/html")

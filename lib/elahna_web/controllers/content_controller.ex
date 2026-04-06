@@ -8,7 +8,7 @@ defmodule ElahnaWeb.ContentController do
     case FileGuard.safe_path(base_dir, filename <> ".md") do
       {:ok, path} ->
         content = File.read!(path)
-        {:ok, html, _} = Earmark.as_html(content)
+        html = Elahna.Markdown.to_html!(content)
 
         conn
         |> put_resp_content_type("text/html")
