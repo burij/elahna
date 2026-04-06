@@ -6,6 +6,7 @@
 - Content stored as flat structure, to increase compatibility with Lahna project
 - Added dynamic content processing
 - Inline HTML in Markdown files is now rendered correctly
+- Markdown is now also rendered inside HTML-Tags
 - Controllers refactored
 - MD-Files are now always get rendered to HTML, even withouth explicit md-request
 
