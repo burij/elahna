@@ -11,7 +11,7 @@ config :elahna, ElahnaWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "URfoqjkJwslDA/KWuOXy3vksAKAGcPGyvzDPvjdZdx9VZdZT9ce5Pucuhxo08sLR",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   watchers: []
 
 # Do not include metadata nor timestamps in development logs

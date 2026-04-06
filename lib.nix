@@ -28,10 +28,16 @@ let
     buildInputs = elixirEnv ++ dependencies;
     shellHook = ''
       cp ./README.md ./priv/content/readme.md
+
+      if [ -z "$SECRET_KEY_BASE" ]; then
+        export SECRET_KEY_BASE=$(mix phx.gen.secret 2>/dev/null || \
+          echo "dev_secret_fallback_for_local_only")
+      fi
+
       alias run='mix phx.server'
       alias form='nixpkgs-fmt lib.nix; mix format'
-      alias test='PHX_SERVER=true SECRET_KEY_BASE=$(mix phx.gen.secret) \
-        CONTENT_PATH=./priv/content ./result/bin/elahna start'
+      alias test='PHX_SERVER=true CONTENT_PATH=./priv/content \
+        ./result/bin/elahna start'
       alias newkey='sudo mkdir -p /var/lib/${appName}/; \
         openssl rand -base64 64 | \
         sudo tee /var/lib/${appName}/phoenix_secret > /dev/null &&

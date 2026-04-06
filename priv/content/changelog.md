@@ -9,6 +9,7 @@
 - Markdown is now also rendered inside HTML-Tags
 - Controllers refactored
 - MD-Files are now always get rendered to HTML, even withouth explicit md-request
+- Key for development environment is now automaticly generated in the nix-shell
 
 #### 0.1.8
 - Elixir rewrite of lahna.burij.de with identical features
