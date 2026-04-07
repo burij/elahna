@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.2.1
+- Refactored container definition for faster setup
+- It is now possible to run multiple elahna apps on one NixOS host
+- Removed pandoc as dependency
+
 #### 0.2.0
 - Content stored as flat structure, to increase compatibility with Lahna project
 - Added dynamic content processing

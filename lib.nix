@@ -6,9 +6,18 @@
 let
   lib = pkgs.lib;
 
+
+
   appName = "elahna";
   appVersion = lib.strings.fileContents ./VERSION;
   appPort = 8151;
+  appUser = "elahna"; # change to your username, if content outside src
+  appGroup = "users";
+
+  contentHostPath = "/srv/config/${appName}/${appVersion}/priv/content";
+  secretHostPath = "/srv/secrets/${appName}/phoenix_secret";
+
+  elixirAppName = "elahna";
 
   elixirEnv = with pkgs; [
     elixir
@@ -20,7 +29,6 @@ let
   dependencies = with pkgs; [
     wget
     nixpkgs-fmt
-    pandoc
     openssl
   ];
 
@@ -38,10 +46,10 @@ let
       alias form='nixpkgs-fmt lib.nix; mix format'
       alias test='PHX_SERVER=true CONTENT_PATH=./priv/content \
         ./result/bin/elahna start'
-      alias newkey='sudo mkdir -p /var/lib/${appName}/; \
+      alias newkey='mkdir -p $(dirname ${secretHostPath}); \
         openssl rand -base64 64 | \
-        sudo tee /var/lib/${appName}/phoenix_secret > /dev/null &&
-        sudo chmod 600 /var/lib/${appName}/phoenix_secret'
+        tee ${secretHostPath} > /dev/null &&
+        chmod 600 ${secretHostPath}'
     '';
   };
 
@@ -59,18 +67,18 @@ let
     containers.${appName} = {
       autoStart = true;
       privateNetwork = false;
-      privateUsers = "no";
+      privateUsers = "pick";
       hostAddress = "10.0.0.1";
       localAddress = "10.0.0.2";
 
       bindMounts = {
         "${appName}-content" = {
-          hostPath = "/srv/config/${appName}/${appVersion}/priv/content";
+          hostPath = contentHostPath;
           mountPoint = "/var/www/content";
           isReadOnly = false;
         };
         "${appName}-secret" = {
-          hostPath = "/var/lib/${appName}/phoenix_secret";
+          hostPath = secretHostPath;
           mountPoint = "/etc/${appName}/secret_key";
           isReadOnly = true;
         };
@@ -87,8 +95,11 @@ let
           description = "${appName} - Phoenix HTMX Server";
 
           script = ''
+
             export SECRET_KEY_BASE=$(cat /etc/${appName}/secret_key)
-            exec ${package}/bin/${appName} start
+            export RELEASE_DISTRIBUTION=name
+            export RELEASE_NODE="${appName}@127.0.0.1"
+            exec ${package}/bin/${elixirAppName} start
           '';
 
           environment = {
@@ -102,23 +113,22 @@ let
           serviceConfig = {
             Restart = "always";
             RestartSec = 10;
-            WorkingDirectory = "/var/www";
-            User = appName;
-            Group = appName;
+            WorkingDirectory = "/var/www/content";
+            User = appUser;
+            Group = appGroup;
           };
           wantedBy = [ "multi-user.target" ];
         };
 
         systemd.tmpfiles.rules = [
-          "d /var/www 0755 ${appName} ${appName}"
-          "d /var/www/content 0755 ${appName} ${appName}"
+          "d /var/www/content 0755 ${appUser} ${appGroup}"
         ];
 
-        users.users.${appName} = {
+        users.users.${appUser} = lib.mkDefault {
           isSystemUser = true;
-          group = appName;
+          group = appGroup;
         };
-        users.groups.${appName} = { };
+        users.groups.${appGroup} = lib.mkDefault { };
 
         networking.firewall.allowedTCPPorts = [ appPort ];
       };
